@@ -52,59 +52,49 @@ const currentOrder: OrderLine[] = [risotto, lunchCombo, soup];
 // 2. FUNCTIONS
 // ---------------------------------------------------------------
 
-// TS: Give every function below an explicit parameter type. Add an explicit
-//     return type only where it documents something non-obvious - elsewhere
-//     rely on *type inference* (check the inferred signature with VS Code's
-//     intellisense before you decide).
-
-function describe(item) {
+function describe(item: MenuItem) {
   return `${item.name} (${item.course}) - EUR ${item.price.toFixed(2)}`;
 }
 
-// TS: An OrderLine is a union, so this function must *narrow* the type before
-//     it can touch the properties that only one member has. Use the 'in'
-//     operator - a ComboDeal has an 'items' property, a MenuItem does not.
-function lineTotal(line) {
+function lineTotal(line: OrderLine) {
   if ("items" in line) {
     return line.price; // Combos are sold at their bundle price.
   }
   return line.price;
 }
 
-function orderTotal(lines) {
+function orderTotal(lines: OrderLine[]) {
   return lines.reduce((total, line) => total + lineTotal(line), 0);
 }
 
-// TS: 'predicate' is a callback - a *higher order function* parameter. Type it
-//     as a function signature: (item: MenuItem) => boolean.
-function filterMenu(items, predicate) {
+function filterMenu(items: MenuItem[], predicate: (item: MenuItem) => boolean) {
   return items.filter(predicate);
 }
 
 // TS: 'max' should be an *optional parameter*: when omitted, return every
 //     match. Beware - the compiler will complain about comparing a possibly
 //     'undefined' value with a number, so handle that case explicitly.
-function cheapest(items, max) {
+function cheapest(items: MenuItem[], max?: number) {
   const sorted = items.sort((a, b) => a.price - b.price);
   return sorted.slice(0, max);
 }
 
 // TS: This function works on any array, not just menu items. Make it
 //     *generic*: <T>(data: T[], criteria: (d: T) => boolean) => T | undefined.
-function firstMatch(data, criteria) {
+function firstMatch(data: unknown[], criteria: (item: unknown) => boolean) {
   return data.find(criteria);
 }
 
 // TS: 'changes' holds *some* of a MenuItem's properties. Use the Partial<>
 //     *utility type* rather than declaring a new interface by hand.
-function updateItem(item, changes) {
+function updateItem(item: MenuItem, changes: Partial<MenuItem>) {
   return { ...item, ...changes };
 }
 
 // TS: The kitchen ticket needs the name and course of an item, and nothing
 //     else - and it must not be modifiable once created. Declare its type by
 //     composing two utility types: Readonly<Pick<...>>.
-function kitchenTicket(item) {
+function kitchenTicket(item: Readonly<Pick<MenuItem, "name" | "course">>) {
   return {
     name: item.name,
     course: item.course,
@@ -114,7 +104,7 @@ function kitchenTicket(item) {
 // TS: An allergy card is a MenuItem without its nutrition property, but with a
 //     'warning' string added. Declare its type with Omit<> and an intersection
 //     (&) - see the EventPass example in the Utility Types section.
-function allergyCard(item) {
+function allergyCard(item: Omit<MenuItem, "nutrition"> & { warning: string }) {
   return {
     id: item.id,
     name: item.name,
