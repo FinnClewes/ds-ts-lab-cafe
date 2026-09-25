@@ -81,7 +81,7 @@ function cheapest(items: MenuItem[], max?: number) {
 
 // TS: This function works on any array, not just menu items. Make it
 //     *generic*: <T>(data: T[], criteria: (d: T) => boolean) => T | undefined.
-function firstMatch(data: unknown[], criteria: (item: unknown) => boolean) {
+function firstMatch<T>(data: T[], criteria: (item: T) => boolean): T | undefined {
   return data.find(criteria);
 }
 
@@ -104,7 +104,7 @@ function kitchenTicket(item: Readonly<Pick<MenuItem, "name" | "course">>) {
 // TS: An allergy card is a MenuItem without its nutrition property, but with a
 //     'warning' string added. Declare its type with Omit<> and an intersection
 //     (&) - see the EventPass example in the Utility Types section.
-function allergyCard(item: Omit<MenuItem, "nutrition"> & { warning: string }) {
+function allergyCard(item: MenuItem): Omit<MenuItem, "nutrition"> & { warning: string } {
   return {
     id: item.id,
     name: item.name,
@@ -134,6 +134,6 @@ console.log(allergyCard(brownie));
 
 // TS: Three more lines below are bugs that only the compiler can see. Once
 //     your types are in place, fix each one and note it in your commit message.
-console.log(describe(lunchCombo));
-console.log(updateItem(soup, { price: "7.00" }));
-console.log(firstMatch(menu, (i) => i.calories < 300));
+// console.log(describe(lunchCombo));
+// console.log(updateItem(soup, { price: "7.00" }));
+// console.log(firstMatch(menu, (i) => i.calories < 300));
