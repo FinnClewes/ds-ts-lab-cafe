@@ -94,7 +94,7 @@ function updateItem(item: MenuItem, changes: Partial<MenuItem>) {
 // TS: The kitchen ticket needs the name and course of an item, and nothing
 //     else - and it must not be modifiable once created. Declare its type by
 //     composing two utility types: Readonly<Pick<...>>.
-function kitchenTicket(item: Readonly<Pick<MenuItem, "name" | "course">>) {
+function kitchenTicket(item: MenuItem): Readonly<Pick<MenuItem, "name" | "course">> {
   return {
     name: item.name,
     course: item.course,
@@ -130,7 +130,9 @@ console.log(allergyCard(brownie));
 
 // TS: The compiler will reject the next line once kitchenTicket returns a
 //     Readonly<> type. Leave it commented out with a note explaining why.
-// kitchenTicket(brownie).name = "Something else";
+//console.log(kitchenTicket(brownie).name = "Something else"); 
+//    This line is commented out because kitchenTicket returns a Readonly type, 
+//    which means its properties cannot be modified.
 
 // TS: Three more lines below are bugs that only the compiler can see. Once
 //     your types are in place, fix each one and note it in your commit message.
