@@ -136,6 +136,6 @@ console.log(allergyCard(brownie));
 
 // TS: Three more lines below are bugs that only the compiler can see. Once
 //     your types are in place, fix each one and note it in your commit message.
-// console.log(describe(lunchCombo));
-// console.log(updateItem(soup, { price: "7.00" }));
-// console.log(firstMatch(menu, (i) => i.calories < 300));
+console.log(describe(soup)); // Fixed: The describe function expects a MenuItem, and soup is a MenuItem.
+console.log(updateItem(soup, { price: 7.00 })); // Fixed: price requires number rather than string
+console.log(firstMatch(menu, (i) => i.nutrition.calories < 300)); // Fixed: Access the calories property through the nutrition object
